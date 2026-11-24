@@ -44,7 +44,10 @@ h2{font-size:clamp(30px,5vw,42px);margin-bottom:24px}
 .card.in{opacity:1;transform:none}
 .card.in:hover{transform:translateY(-6px);box-shadow:0 12px 28px rgba(0,0,0,.18)}
 .card .pic{background:var(--teal);display:grid;place-items:center;height:150px}
+.card .pic{overflow:hidden}
 .card .pic svg{width:110px;height:110px;transition:transform .4s}
+.card .pic img{width:100%;height:150px;object-fit:cover;display:block;transition:transform .5s}
+.card:hover .pic img{transform:scale(1.07)}
 .card:hover .pic svg{transform:scale(1.12) rotate(-4deg)}
 .card .body{padding:14px 16px 16px}
 .card h3{font-size:21px}
@@ -118,7 +121,7 @@ footer{background:var(--teal);color:var(--on-teal);text-align:center;padding:24p
   </div>
 </section>
 
-<footer>© دار النيل. كل الحقوق محفوظة.</footer>
+<footer>© دار النيل. كل الحقوق محفوظة.<br><small>صور الأطباق من Wikimedia Commons (تراخيص CC BY وCC BY-SA وCC0) وهي مؤقتة.</small></footer>
 
 <script>
 var ITEMS=[
@@ -138,13 +141,14 @@ var ITEMS=[
 ["حلويات","كنافة بالقشطة","كنافة سخنة بالقشطة والقطر",85,"sweet"],
 ["حلويات","رز بلبن","رز بلبن بالفانيلا والمكسرات",45,"bowl","#f2e6c9"]
 ];
+var PHOTOS={"كشري دار النيل": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Egyptian_Koshari.jpg/960px-Egyptian_Koshari.jpg", "ميكس مشويات": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Arabic_MixedGrill.JPG/960px-Arabic_MixedGrill.JPG", "محشي ورق عنب": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Mahshi.JPG/960px-Mahshi.JPG", "سمك مشوي": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Grilled_fish_with_Lemon.jpg/960px-Grilled_fish_with_Lemon.jpg", "أم علي": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Umm_Ali.JPG/960px-Umm_Ali.JPG", "ملوخية بالفراخ": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Molokheya_hi_res.JPG/960px-Molokheya_hi_res.JPG", "فتة لحمة": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Egyptian_fatta.gif/960px-Egyptian_fatta.gif", "حمام محشي": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Hamam_mahshi.jpg/960px-Hamam_mahshi.jpg", "كفتة على الفحم": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/K%C3%B6fte_kebabs.jpg/960px-K%C3%B6fte_kebabs.jpg", "فراخ مشوية": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Chicken_Alfaham.jpg/960px-Chicken_Alfaham.jpg", "طعمية": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Egypt_falafel.jpg/960px-Egypt_falafel.jpg", "شوربة عدس": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Homemade_Lentil_Soup_-_Lavash_2025-02-10.jpg/960px-Homemade_Lentil_Soup_-_Lavash_2025-02-10.jpg", "بابا غنوج": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Baba_Ghanoush.jpg/960px-Baba_Ghanoush.jpg", "كنافة بالقشطة": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Cream_cheese_kunafa.jpg/960px-Cream_cheese_kunafa.jpg", "رز بلبن": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Rice_pudding_cinnamon.jpg/960px-Rice_pudding_cinnamon.jpg"};
 var cats=["الكل"].concat(ITEMS.map(function(i){return i[0]}).filter(function(c,i,a){return a.indexOf(c)===i}));
 var tabs=document.getElementById("tabs"),cards=document.getElementById("cards"),io;
 function observe(el){if(io)io.observe(el);else el.classList.add("in")}
 try{io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}})},{threshold:.15})}catch(e){}
 function render(cat){
   cards.innerHTML=ITEMS.filter(function(i){return cat==="الكل"||i[0]===cat}).map(function(i,n){
-    return '<article class="card" style="transition-delay:'+(n%4)*80+'ms"><div class="pic"><svg viewBox="0 0 100 100" style="--food:'+(i[5]||"#c8553d")+'" aria-hidden="true"><use href="#'+i[4]+'"/></svg></div><div class="body"><h3>'+i[1]+'</h3><p>'+i[2]+'</p><span class="p">'+i[3]+' ج</span></div></article>'
+    return '<article class="card" style="transition-delay:'+(n%4)*80+'ms"><div class="pic">'+(PHOTOS[i[1]]?'<img src="'+PHOTOS[i[1]]+'"'+(i[1]=="سمك مشوي"?' style="object-position:50% 85%"':"")+' alt="'+i[1]+'" loading="lazy" width="480" height="150">':'<svg viewBox="0 0 100 100" style="--food:'+(i[5]||"#c8553d")+'" aria-hidden="true"><use href="#'+i[4]+'"/></svg>')+'</div><div class="body"><h3>'+i[1]+'</h3><p>'+i[2]+'</p><span class="p">'+i[3]+' ج</span></div></article>'
   }).join("");
   cards.querySelectorAll(".card").forEach(observe);
 }
